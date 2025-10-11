@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Ravex Executor v1.0 - Executor Profissional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0000 0%, #1a0000 25%, #330000 50%, #1a0000 75%, #0a0000 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Partículas animadas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 20s infinite;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) translateX(0) rotate(0deg); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { 
+                transform: translateY(-100vh) translateX(100px) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ff0000, #8b0000);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #ff3333, #cc0000);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0000 0%, #330000 50%, #0a0000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.6s ease-out 1.5s forwards;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-logo {
+            width: 220px;
+            height: 220px;
+            background: #000000;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 60px rgba(255, 0, 0, 0.7), 0 0 100px rgba(255, 0, 0, 0.3);
+            border: 3px solid #ff0000;
+            padding: 25px;
+            animation: logoAppear 0.8s ease-out forwards, logoPulse 2s ease-in-out infinite 1s;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            animation: logoShine 3s infinite;
+        }
+
+        @keyframes logoShine {
+            0% { transform: rotate(0deg) translate(-100%, -100%); }
+            100% { transform: rotate(360deg) translate(-100%, -100%); }
+        }
+
+        .loading-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.6));
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: #ff3333;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            animation: textPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes logoAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-180deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.15) rotate(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { 
+                box-shadow: 0 15px 60px rgba(255, 0, 0, 0.7), 0 0 100px rgba(255, 0, 0, 0.3);
+            }
+            50% { 
+                box-shadow: 0 20px 80px rgba(255, 0, 0, 0.9), 0 0 120px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 80px;
+            background: linear-gradient(180deg, rgba(80, 0, 0, 0.6) 0%, rgba(26, 0, 0, 0.8) 100%);
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+            animation: headerShine 3s infinite;
+        }
+
+        @keyframes headerShine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #000000, #1a0000);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.6), 0 0 80px rgba(255, 0, 0, 0.3);
+            border: 3px solid #ff0000;
+            padding: 20px;
+            flex-shrink: 0;
+            animation: floatLogo 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.15), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg) translate(-100%, -100%); }
+            100% { transform: rotate(360deg) translate(-100%, -100%); }
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.8), 0 0 100px rgba(255, 0, 0, 0.5);
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.5));
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h1 {
+            font-size: 4em;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.5);
+            background: linear-gradient(to right, #ff0000, #ff6666, #ff0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientText 3s ease infinite;
+            font-weight: 900;
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        .version {
+            font-size: 3em;
+            color: #ff0000;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.4);
+            line-height: 1;
+            animation: versionPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes versionPulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.4);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.6);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #ffcccc;
+            margin-top: 5px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 25px 50px;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.4em;
+            font-weight: bold;
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
+            transition: all 0.4s ease;
+            border: 3px solid #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            animation: slideInRight 0.8s ease-out, btnPulse 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
+            }
+            50% { 
+                box-shadow: 0 15px 50px rgba(255, 0, 0, 0.9), 0 0 30px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 1), 0 0 40px rgba(255, 0, 0, 0.6);
+            background: linear-gradient(135deg, #ff3333, #ff0000);
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .section {
+            margin: 60px 0;
+            padding: 50px;
+            background: rgba(139, 0, 0, 0.15);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.2);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            color: #ff3333;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            position: relative;
+            padding-bottom: 15px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #ff0000, transparent);
+            border-radius: 2px;
+            animation: lineExpand 0.6s ease-out 0.3s backwards;
+        }
+
+        @keyframes lineExpand {
+            0% { width: 0; }
+            100% { width: 80px; }
+        }
+
+        h3 {
+            font-size: 2em;
+            margin: 30px 0 20px;
+            color: #ff6666;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        p {
+            font-size: 1.15em;
+            margin-bottom: 20px;
+            color: #ffcccc;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            padding: 35px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(255, 0, 0, 0.15));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
+            transition: all 0.6s ease;
+            transform: scale(0);
+        }
+
+        .feature-card:hover::before {
+            transform: scale(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.5);
+            border-color: #ff0000;
+        }
+
+        .feature-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+            color: #ffcccc;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            animation: fadeInLeft 0.5s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        li:hover {
+            padding-left: 10px;
+            color: #fff;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        li:before {
+            content: "▸ ";
+            color: #ff0000;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 65px;
+            margin: 30px 0;
+        }
+
+        .steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+            animation: stepPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { 
+                box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+            }
+            50% { 
+                box-shadow: 0 8px 30px rgba(255, 0, 0, 0.8);
+            }
+        }
+
+        .warning-box {
+            background: rgba(255, 100, 0, 0.1);
+            border: 2px solid rgba(255, 100, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 5px solid #ff6400;
+            animation: warningPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 rgba(255, 100, 0, 0);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(255, 100, 0, 0.3);
+            }
+        }
+
+        .warning-box h3 {
+            color: #ff6400;
+            margin-top: 0;
+        }
+
+        .module-img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #000, #1a0000);
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(255,0,0,0.35);
+            border: 2px solid rgba(255,0,0,0.5);
+            animation: floatModule 3.5s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .module-img:hover {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 15px 50px rgba(255,0,0,0.6);
+        }
+
+        @keyframes floatModule {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            margin-top: 80px;
+            border-top: 2px solid rgba(255, 0, 0, 0.3);
+            color: #ff9999;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        footer p {
+            margin: 10px 0;
+            font-size: 1em;
+        }
+
+        a {
+            color: #ff3333;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: #ff6666;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        @media (max-width: 1024px) {
+            header {
+                flex-direction: column;
+                gap: 30px;
+                padding: 40px 40px;
+                text-align: center;
+            }
+
+            .header-left {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 3em;
+            }
+
+            .version {
+                font-size: 2.5em;
+            }
+
+            .download-btn {
+                font-size: 1.2em;
+                padding: 20px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                width: 150px;
+                height: 150px;
+            }
+
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .version {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .content-wrapper {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-btn {
+                font-size: 1em;
+                padding: 18px 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas animadas -->
+    <div class="particles">
+        <div class="particle" style="left: 5%; animation-delay: 0s; animation-duration: 15s;"></div>
+        <div class="particle" style="left: 15%; animation-delay: 2s; animation-duration: 18s;"></div>
+        <div class="particle" style="left: 25%; animation-delay: 4s; animation-duration: 20s;"></div>
+        <div class="particle" style="left: 35%; animation-delay: 1s; animation-duration: 22s;"></div>
+        <div class="particle" style="left: 45%; animation-delay: 3s; animation-duration: 16s;"></div>
+        <div class="particle" style="left: 55%; animation-delay: 5s; animation-duration: 19s;"></div>
+        <div class="particle" style="left: 65%; animation-delay: 2.5s; animation-duration: 21s;"></div>
+        <div class="particle" style="left: 75%; animation-delay: 4.5s; animation-duration: 17s;"></div>
+        <div class="particle" style="left: 85%; animation-delay: 1.5s; animation-duration: 23s;"></div>
+        <div class="particle" style="left: 95%; animation-delay: 3.5s; animation-duration: 18s;"></div>
+    </div>
+
+    <!-- Tela de Carregamento -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="favicon.ico" alt="Ravex Logo" onerror="this.onerror=null; this.src='Imgs/simbolo2.png';">
+            </div>
+            <div class="loading-text">CARREGANDO...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="logo">
+                    <img src="favicon.ico" alt="Ravex Logo" onerror="this.onerror=null; this.src='imgs/simbolo2.png';">
+                </div>
+                <div class="header-title">
+                    <h1>Ravex Executor</h1>
+                    <div class="version">v1.0</div>
+                    <p class="subtitle">Site Oficial - Executor para Windows</p>
+                </div>
+            </div>
+            <a href="#download" class="download-btn">BAIXAR AGORA</a>
+        </header>
+
+        <div class="content-wrapper">
+            <section class="section">
+                <h2>🚀 O que é o Ravex Executor?</h2>
+                <p>O <strong>Ravex Executor</strong> é uma ferramenta avançada de exploit desenvolvida especificamente para Windows, projetada para injetar e executar scripts Lua personalizados no Roblox. Com tecnologia de ponta, permite aos usuários manipular a jogabilidade, automatizar ações complexas e acessar recursos exclusivos não disponíveis no cliente padrão.</p>
+
+                <p>Equipado com <strong>Modo Furtivo 100%</strong>, o Ravex utiliza camadas avançadas de ofuscação e técnicas de segurança de última geração para operar de forma completamente indetectável pelos sistemas anti-cheat do Roblox, incluindo o Byfron.</p>
+
+                <div class="warning-box">
+                    <h3>⚠️ Aviso Importante</h3>
+                    <p>O uso de executors viola os Termos de Serviço do Roblox e pode resultar em banimento permanente da conta. Use por sua própria conta e risco. Este software é fornecido apenas para fins educacionais.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🛡️ Onde Baixar com Segurança?</h2>
+                <p>Múltiplos casos de malware foram reportados por usuários que baixaram de sites não oficiais. Para sua segurança, <strong>baixe APENAS do site oficial</strong>: ravexexecutor.com</p>
+                
+                <h3>✅ Benefícios do Download Oficial:</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>100% Seguro</h3>
+                        <p>Arquivo original verificado, sem malware ou vírus injetados</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Proteção Total</h3>
+                        <p>Sem riscos de ter seu computador ou conta Roblox hackeados</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Sempre Atualizado</h3>
+                        <p>Versão mais recente com todos os patches de segurança</p>
+                    </div>
+                </div>
+            </section>
+           
+            <section class="section">
+                <h2>⚡ Recursos Premium</h2>
+                <ul>
+                    <li>🎨 Interface moderna com animações fluidas e design profissional</li>
+                    <li>🔓 Versões com e sem sistema de chaves disponíveis</li>
+                    <li>👨‍💻 Atualizações frequentes por desenvolvedores experientes</li>
+                    <li>🥷 Bypass Byfron 100% com tecnologia stealth avançada</li>
+                    <li>📚 Hub de scripts integrado com biblioteca extensa e atualizada</li>
+                    <li>⚡ Injeção rápida e estável em todos os jogos</li>
+                    <li>🔧 Suporte para múltiplas APIs de script (Level 7+)</li>
+                    <li>💾 Sistema de auto-save para seus scripts favoritos</li>
+                </ul>
+            </section>
+
+            <section class="section" id="download">
+                <h2>📥 Instalação Passo a Passo</h2>
+                <p>Siga este guia completo para instalar o Ravex Executor com segurança:</p>
+                <ul class="steps">
+                    <li>Visite o <strong>Site Oficial</strong> em ravexexecutor.com para garantir um download 100% seguro</li>
+                    <li>Clique no botão <strong>'BAIXAR'</strong> e aguarde o download completar</li>
+                    <li>Desative temporariamente seu antivírus (pode detectar falsamente como ameaça)</li>
+                    <li>Extraia os arquivos baixados para uma pasta de sua preferência</li>
+                    <li>Acesse <strong>Roblox.com</strong> e faça login na sua conta</li>
+                    <li>Inicie o jogo desejado e aguarde carregar completamente</li>
+                    <li>Execute o <strong>Ravex.exe</strong> como Administrador</li>
+                    <li>Aguarde a interface do Ravex aparecer (5-10 segundos)</li>
+                    <li>Carregue seu script através do Script Hub ou cole manualmente</li>
+                    <li>Clique em <strong>'Injetar'</strong> e aguarde a confirmação</li>
+                    <li>Aproveite! O script agora está ativo no jogo</li>
+                </ul>
+                <div style="text-align: center; margin-top: 50px;">
+                    <a href="#" class="download-btn">🔥 Baixar Ravex Executor Agora</a>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>❓ Perguntas Frequentes</h2>
+                
+                <h3>É seguro usar o Ravex?</h3>
+                <p>Quando baixado do site oficial, o arquivo é completamente seguro e livre de malware. No entanto, o uso de executors viola os ToS do Roblox.</p>
+                
+                <h3>Funciona em todos os jogos?</h3>
+                <p>O Ravex é compatível com a maioria dos jogos do Roblox, incluindo aqueles com anti-cheat Byfron.</p>
+                
+                <h3>Preciso de chave?</h3>
+                <p>Existem versões com e sem chave. A versão sem chave oferece acesso imediato.</p>
+                
+                <h3>Meu antivírus detecta como vírus!</h3>
+                <p>Isso é um falso positivo comum. Executors são detectados devido à natureza de injeção de código. Adicione à lista de exceções.</p>
+                
+                <div style="margin-top: 50px; text-align: center;">
+                    <img class="module-img" src="/imgs/module.png" alt="Module" onerror="this.onerror=null; this.src='imgs/simbolo2.png';">
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>💬 Suporte e Comunidade</h2>
+                <p>Precisa de ajuda? Encontrou algum problema? Nossa equipe está pronta para ajudar!</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Discord Oficial</h3>
+                        <p>Junte-se à nossa comunidade ativa com milhares de usuários</p>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a href="https://discord.gg/seu-link-aqui" class="download-btn" style="font-size: 1em; padding: 12px 30px;">Entrar no Discord</a>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📧</div>
+                        <h3>Suporte por Email</h3>
+                        <p>Resposta garantida em até 24 horas</p>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a href="mailto:suporte@ravexexecutor.com" class="download-btn" style="font-size: 1em; padding: 12px 30px;">Enviar Email</a>
+                        </div>
+                    </div>
+
+        <footer>
+            <h3 style="color: #ff3333; margin-bottom: 20px;">Ravex Executor</h3>
+            <p>&copy; 2025 Ravex Executor. Todos os direitos reservados.</p>
+            <p>Site Oficial: <a href="https://kadu202418.github.io/Ravex-Executor-/">https://kadu202418.github.io/Ravex-Executor-/</a></p>
+            <p style="font-size: 0.9em; margin-top: 20px; opacity: 0.7;">⚠️ Use por sua própria conta e risco. Não nos responsabilizamos por banimentos.</p>
+        </footer>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }, 2000);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
