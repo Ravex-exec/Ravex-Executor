@@ -2,14 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <title>Ravex Executor v1.0 - Executor Profissional</title>
+    <title>Ravex Executor v1.0 - Modo Testes</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -27,7 +28,6 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* Partículas animadas */
         .particles {
             position: fixed;
             top: 0;
@@ -41,13 +41,13 @@
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             background: #ff0000;
             border-radius: 50%;
             opacity: 0;
             animation: float 20s infinite;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
         }
 
         @keyframes float {
@@ -64,7 +64,7 @@
         }
 
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -73,12 +73,7 @@
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, #ff0000, #8b0000);
-            border-radius: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #ff3333, #cc0000);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            border-radius: 4px;
         }
 
         .loading-screen {
@@ -97,19 +92,20 @@
 
         .loading-content {
             text-align: center;
+            padding: 20px;
         }
 
         .loading-logo {
-            width: 220px;
-            height: 220px;
+            width: 140px;
+            height: 140px;
             background: #000000;
-            border-radius: 25px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 15px 60px rgba(255, 0, 0, 0.7), 0 0 100px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
             border: 3px solid #ff0000;
-            padding: 25px;
+            padding: 20px;
             animation: logoAppear 0.8s ease-out forwards, logoPulse 2s ease-in-out infinite 1s;
             margin: 0 auto;
             position: relative;
@@ -138,15 +134,15 @@
             object-fit: contain;
             position: relative;
             z-index: 1;
-            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.6));
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
         }
 
         .loading-text {
-            margin-top: 30px;
-            font-size: 1.5em;
+            margin-top: 20px;
+            font-size: 1.2em;
             color: #ff3333;
             font-weight: bold;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
             animation: textPulse 1.5s ease-in-out infinite;
         }
 
@@ -174,10 +170,10 @@
 
         @keyframes logoPulse {
             0%, 100% { 
-                box-shadow: 0 15px 60px rgba(255, 0, 0, 0.7), 0 0 100px rgba(255, 0, 0, 0.3);
+                box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
             }
             50% { 
-                box-shadow: 0 20px 80px rgba(255, 0, 0, 0.9), 0 0 120px rgba(255, 0, 0, 0.5);
+                box-shadow: 0 15px 60px rgba(255, 0, 0, 0.9);
             }
         }
 
@@ -196,13 +192,15 @@
 
         header {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 40px 80px;
+            justify-content: center;
+            padding: 30px 20px;
             background: linear-gradient(180deg, rgba(80, 0, 0, 0.6) 0%, rgba(26, 0, 0, 0.8) 100%);
             border-bottom: 2px solid rgba(255, 0, 0, 0.3);
             position: relative;
-            overflow: hidden;
+            text-align: center;
+            gap: 20px;
         }
 
         header::before {
@@ -223,28 +221,28 @@
 
         .header-left {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 40px;
+            gap: 20px;
             position: relative;
             z-index: 1;
         }
 
         .logo {
-            width: 180px;
-            height: 180px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(135deg, #000000, #1a0000);
-            border-radius: 20px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.6), 0 0 80px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 10px 35px rgba(255, 0, 0, 0.6);
             border: 3px solid #ff0000;
-            padding: 20px;
+            padding: 15px;
             flex-shrink: 0;
             animation: floatLogo 3s ease-in-out infinite;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
         .logo::before {
@@ -263,29 +261,24 @@
             100% { transform: rotate(360deg) translate(-100%, -100%); }
         }
 
-        .logo:hover {
-            transform: scale(1.05) rotate(5deg);
-            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.8), 0 0 100px rgba(255, 0, 0, 0.5);
-        }
-
         .logo img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             position: relative;
             z-index: 1;
-            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
         }
 
         @keyframes floatLogo {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
         }
 
         .header-title {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             animation: slideInLeft 0.8s ease-out;
         }
 
@@ -301,9 +294,9 @@
         }
 
         h1 {
-            font-size: 4em;
+            font-size: 2em;
             margin: 0;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 0 20px rgba(255, 0, 0, 1);
             background: linear-gradient(to right, #ff0000, #ff6666, #ff0000);
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -311,8 +304,8 @@
             background-clip: text;
             animation: gradientText 3s ease infinite;
             font-weight: 900;
-            letter-spacing: 3px;
-            line-height: 1;
+            letter-spacing: 2px;
+            line-height: 1.2;
         }
 
         @keyframes gradientText {
@@ -321,10 +314,10 @@
         }
 
         .version {
-            font-size: 3em;
+            font-size: 1.8em;
             color: #ff0000;
             font-weight: 900;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.4);
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
             line-height: 1;
             animation: versionPulse 2s ease-in-out infinite;
         }
@@ -332,40 +325,39 @@
         @keyframes versionPulse {
             0%, 100% { 
                 transform: scale(1);
-                text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.4);
+                text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
             }
             50% { 
                 transform: scale(1.05);
-                text-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.6);
+                text-shadow: 0 0 25px rgba(255, 0, 0, 1);
             }
         }
 
         .subtitle {
-            font-size: 1.3em;
+            font-size: 0.95em;
             color: #ffcccc;
             margin-top: 5px;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
         }
 
         .download-btn {
             display: inline-block;
-            padding: 25px 50px;
+            padding: 16px 32px;
             background: linear-gradient(135deg, #ff0000, #cc0000);
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.4em;
+            font-size: 1em;
             font-weight: bold;
-            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
-            transition: all 0.4s ease;
-            border: 3px solid #ff0000;
+            box-shadow: 0 8px 30px rgba(255, 0, 0, 0.7);
+            transition: all 0.3s ease;
+            border: 2px solid #ff0000;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            white-space: nowrap;
+            letter-spacing: 1.5px;
             position: relative;
-            z-index: 1;
             overflow: hidden;
             animation: slideInRight 0.8s ease-out, btnPulse 2s ease-in-out infinite 1s;
+            touch-action: manipulation;
         }
 
         @keyframes slideInRight {
@@ -381,10 +373,10 @@
 
         @keyframes btnPulse {
             0%, 100% { 
-                box-shadow: 0 10px 40px rgba(255, 0, 0, 0.7);
+                box-shadow: 0 8px 30px rgba(255, 0, 0, 0.7);
             }
             50% { 
-                box-shadow: 0 15px 50px rgba(255, 0, 0, 0.9), 0 0 30px rgba(255, 0, 0, 0.5);
+                box-shadow: 0 12px 40px rgba(255, 0, 0, 0.9);
             }
         }
 
@@ -406,26 +398,24 @@
             height: 400px;
         }
 
-        .download-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 60px rgba(255, 0, 0, 1), 0 0 40px rgba(255, 0, 0, 0.6);
-            background: linear-gradient(135deg, #ff3333, #ff0000);
+        .download-btn:active {
+            transform: scale(0.95);
         }
 
         .content-wrapper {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 40px;
+            padding: 20px 15px;
         }
 
         .section {
-            margin: 60px 0;
-            padding: 50px;
+            margin: 30px 0;
+            padding: 25px 20px;
             background: rgba(139, 0, 0, 0.15);
-            border-radius: 25px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
             animation: fadeInUp 0.6s ease-out;
         }
@@ -433,7 +423,7 @@
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             100% {
                 opacity: 1;
@@ -442,18 +432,18 @@
         }
 
         .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 0, 0, 0.2);
             border-color: rgba(255, 0, 0, 0.5);
         }
 
         h2 {
-            font-size: 2.8em;
-            margin-bottom: 30px;
+            font-size: 1.6em;
+            margin-bottom: 20px;
             color: #ff3333;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            text-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
             animation: slideInLeft 0.6s ease-out;
         }
 
@@ -462,8 +452,8 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 80px;
-            height: 4px;
+            width: 60px;
+            height: 3px;
             background: linear-gradient(to right, #ff0000, transparent);
             border-radius: 2px;
             animation: lineExpand 0.6s ease-out 0.3s backwards;
@@ -471,36 +461,36 @@
 
         @keyframes lineExpand {
             0% { width: 0; }
-            100% { width: 80px; }
+            100% { width: 60px; }
         }
 
         h3 {
-            font-size: 2em;
-            margin: 30px 0 20px;
+            font-size: 1.3em;
+            margin: 20px 0 15px;
             color: #ff6666;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
         }
 
         p {
-            font-size: 1.15em;
-            margin-bottom: 20px;
+            font-size: 1em;
+            margin-bottom: 15px;
             color: #ffcccc;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 25px;
         }
 
         .feature-card {
-            padding: 35px;
+            padding: 25px;
             background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(255, 0, 0, 0.15));
-            border-radius: 20px;
+            border-radius: 15px;
             border: 1px solid rgba(255, 0, 0, 0.4);
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             animation: fadeIn 0.6s ease-out;
@@ -509,7 +499,7 @@
         @keyframes fadeIn {
             0% {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.95);
             }
             100% {
                 opacity: 1;
@@ -533,22 +523,21 @@
             transform: scale(1);
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.5);
-            border-color: #ff0000;
+        .feature-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
         }
 
         .feature-icon {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.5));
             animation: iconBounce 2s ease-in-out infinite;
         }
 
         @keyframes iconBounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         ul {
@@ -557,10 +546,10 @@
         }
 
         li {
-            padding: 15px 0;
+            padding: 12px 0;
             border-bottom: 1px solid rgba(255, 0, 0, 0.2);
             color: #ffcccc;
-            font-size: 1.1em;
+            font-size: 0.95em;
             transition: all 0.3s ease;
             animation: fadeInLeft 0.5s ease-out;
         }
@@ -586,8 +575,8 @@
             content: "▸ ";
             color: #ff0000;
             font-weight: bold;
-            margin-right: 15px;
-            font-size: 1.2em;
+            margin-right: 10px;
+            font-size: 1.1em;
             animation: arrowPulse 1.5s ease-in-out infinite;
         }
 
@@ -603,8 +592,8 @@
         .steps li {
             counter-increment: step-counter;
             position: relative;
-            padding-left: 65px;
-            margin: 30px 0;
+            padding-left: 50px;
+            margin: 20px 0;
         }
 
         .steps li:before {
@@ -615,33 +604,34 @@
             transform: translateY(-50%);
             background: linear-gradient(135deg, #ff0000, #8b0000);
             color: white;
-            width: 45px;
-            height: 45px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
+            font-size: 0.9em;
             animation: stepPulse 2s ease-in-out infinite;
         }
 
         @keyframes stepPulse {
             0%, 100% { 
-                box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+                box-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
             }
             50% { 
-                box-shadow: 0 8px 30px rgba(255, 0, 0, 0.8);
+                box-shadow: 0 6px 25px rgba(255, 0, 0, 0.8);
             }
         }
 
         .warning-box {
             background: rgba(255, 100, 0, 0.1);
             border: 2px solid rgba(255, 100, 0, 0.4);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            border-left: 5px solid #ff6400;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6400;
             animation: warningPulse 2s ease-in-out infinite;
         }
 
@@ -650,136 +640,167 @@
                 box-shadow: 0 0 0 rgba(255, 100, 0, 0);
             }
             50% { 
-                box-shadow: 0 0 20px rgba(255, 100, 0, 0.3);
+                box-shadow: 0 0 15px rgba(255, 100, 0, 0.3);
             }
         }
 
         .warning-box h3 {
             color: #ff6400;
             margin-top: 0;
+            font-size: 1.2em;
         }
 
-        .module-img {
-            width: 140px;
-            height: 140px;
-            object-fit: contain;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #000, #1a0000);
-            padding: 12px;
-            box-shadow: 0 10px 40px rgba(255,0,0,0.35);
-            border: 2px solid rgba(255,0,0,0.5);
-            animation: floatModule 3.5s ease-in-out infinite;
-            transition: all 0.3s ease;
-        }
-
-        .module-img:hover {
-            transform: scale(1.1) rotate(-5deg);
-            box-shadow: 0 15px 50px rgba(255,0,0,0.6);
+        .warning-box p {
+            font-size: 0.95em;
         }
 
         @keyframes floatModule {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
         }
 
         footer {
             text-align: center;
-            padding: 50px;
-            margin-top: 80px;
+            padding: 30px 20px;
+            margin-top: 50px;
             border-top: 2px solid rgba(255, 0, 0, 0.3);
             color: #ff9999;
             background: rgba(0, 0, 0, 0.3);
         }
 
-        footer p {
-            margin: 10px 0;
-            font-size: 1em;
+        footer h3 {
+            color: #ff3333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
         }
 
-        a {
+        footer p {
+            margin: 8px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        footer a {
             color: #ff3333;
+            word-break: break-all;
             transition: all 0.3s ease;
         }
 
-        a:hover {
+        footer a:hover {
             color: #ff6666;
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
-        @media (max-width: 1024px) {
+        /* Melhorias específicas para tablets */
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .version {
+                font-size: 2.2em;
+            }
+            
+            .logo {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .section {
+                padding: 35px 30px;
+            }
+
             header {
-                flex-direction: column;
-                gap: 30px;
                 padding: 40px 40px;
-                text-align: center;
+            }
+
+            .content-wrapper {
+                padding: 30px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 40px 60px;
             }
 
             .header-left {
-                flex-direction: column;
-                gap: 20px;
+                flex-direction: row;
+                gap: 30px;
+            }
+
+            .logo {
+                width: 160px;
+                height: 160px;
             }
 
             h1 {
-                font-size: 3em;
+                font-size: 3.5em;
             }
 
             .version {
-                font-size: 2.5em;
+                font-size: 2.8em;
             }
 
             .download-btn {
                 font-size: 1.2em;
                 padding: 20px 40px;
             }
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 30px 20px;
-            }
-
-            .logo {
-                width: 150px;
-                height: 150px;
-            }
-
-            h1 {
-                font-size: 2.5em;
-            }
-
-            .version {
-                font-size: 2em;
-            }
-
-            .subtitle {
-                font-size: 1.1em;
-            }
 
             .content-wrapper {
-                padding: 20px;
+                max-width: 1200px;
+                padding: 40px;
             }
 
             .section {
-                padding: 30px 20px;
+                padding: 40px;
+                margin: 50px 0;
             }
 
             h2 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
 
             .features-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+        }
+
+        /* Melhorias para telas muito pequenas */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.7em;
+            }
+            
+            .version {
+                font-size: 1.5em;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .download-btn {
+                padding: 14px 28px;
+                font-size: 0.9em;
             }
 
-            .download-btn {
-                font-size: 1em;
-                padding: 18px 35px;
+            .loading-logo {
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Partículas animadas -->
     <div class="particles">
         <div class="particle" style="left: 5%; animation-delay: 0s; animation-duration: 15s;"></div>
         <div class="particle" style="left: 15%; animation-delay: 2s; animation-duration: 18s;"></div>
@@ -793,7 +814,6 @@
         <div class="particle" style="left: 95%; animation-delay: 3.5s; animation-duration: 18s;"></div>
     </div>
 
-    <!-- Tela de Carregamento -->
     <div class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
@@ -885,7 +905,7 @@
                     <li>Clique em <strong>'Injetar'</strong> e aguarde a confirmação</li>
                     <li>Aproveite! O script agora está ativo no jogo</li>
                 </ul>
-                <div style="text-align: center; margin-top: 50px;">
+                <div style="text-align: center; margin-top: 30px;">
                     <a href="#" class="download-btn">🔥 Baixar Ravex Executor Agora</a>
                 </div>
             </section>
@@ -905,38 +925,39 @@
                 <h3>Meu antivírus detecta como vírus!</h3>
                 <p>Isso é um falso positivo comum. Executors são detectados devido à natureza de injeção de código. Adicione à lista de exceções.</p>
                 
-                <div style="margin-top: 50px; text-align: center;">
-                    <img class="module-img" src="/imgs/module.png" alt="Module" onerror="this.onerror=null; this.src='imgs/simbolo2.png';">
-                </div>
+               
             </section>
 
             <section class="section">
                 <h2>💬 Suporte e Comunidade</h2>
-                <p>Precisa de ajuda? Encontrou algum problema? Nossa equipe está pronta para ajudar!</p>
+                <p style="margin-bottom: 35px;">Precisa de ajuda? Encontrou algum problema? Nossa equipe está pronta para ajudar!</p>
                 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">💬</div>
-                        <h3>Discord Oficial</h3>
-                        <p>Junte-se à nossa comunidade ativa com milhares de usuários</p>
+                <div class="features-grid" style="gap: 25px; margin-top: 35px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                    <div class="feature-card" style="padding: 35px;">
+                        <div class="feature-icon" style="font-size: 3em; margin-bottom: 20px;">💬</div>
+                        <h3 style="font-size: 1.4em; margin-bottom: 15px;">Discord Oficial</h3>
+                        <p style="font-size: 1em; margin-bottom: 20px;">Junte-se à nossa comunidade ativa com milhares de usuários</p>
                         <div style="text-align: center; margin-top: 20px;">
-                            <a href="https://discord.gg/seu-link-aqui" class="download-btn" style="font-size: 1em; padding: 12px 30px;">Entrar no Discord</a>
+                            <a href="https://discord.gg/2fRyz6Ue" class="download-btn" style="font-size: 0.95em; padding: 14px 28px;">ENTRAR NO DISCORD</a>
                         </div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📧</div>
-                        <h3>Suporte por Email</h3>
-                        <p>Resposta garantida em até 24 horas</p>
+                    <div class="feature-card" style="padding: 35px;">
+                        <div class="feature-icon" style="font-size: 3em; margin-bottom: 20px;">📧</div>
+                        <h3 style="font-size: 1.4em; margin-bottom: 15px;">Suporte por Email</h3>
+                        <p style="font-size: 1em; margin-bottom: 20px;">Resposta garantida em até 24 horas</p>
                         <div style="text-align: center; margin-top: 20px;">
-                            <a href="mailto:suporte@ravexexecutor.com" class="download-btn" style="font-size: 1em; padding: 12px 30px;">Enviar Email</a>
+                            <a href="mailto:ravexexecutor@gmail.com" class="download-btn" style="font-size: 0.95em; padding: 14px 28px;">ENVIAR EMAIL</a>
                         </div>
                     </div>
+                </div>
+            </section>
+        </div>
 
         <footer>
             <h3 style="color: #ff3333; margin-bottom: 20px;">Ravex Executor</h3>
             <p>&copy; 2025 Ravex Executor. Todos os direitos reservados.</p>
-            <p>Site Oficial: <a href="https://kadu202418.github.io/Ravex-Executor-/">https://kadu202418.github.io/Ravex-Executor-/</a></p>
-            <p style="font-size: 0.9em; margin-top: 20px; opacity: 0.7;">⚠️ Use por sua própria conta e risco. Não nos responsabilizamos por banimentos.</p>
+            <p>Site Oficial: <a href="https://ravex-exec.github.io/Ravex-Executor/">https://ravex-exec.github.io/Ravex-Executor/</a></p>
+            <p style="font-size: 0.85em; margin-top: 15px; opacity: 0.7;">⚠️ Use por sua própria conta e risco. Não nos responsabilizamos por banimentos.</p>
         </footer>
     </div>
 
