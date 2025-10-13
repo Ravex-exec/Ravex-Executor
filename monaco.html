@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            overflow: hidden;
+        }
+
+        .editor-container {
+            height: 100vh;
+            width: 100%;
+        }
+
+        #editor {
+            width: 100%;
+            height: 100%;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <div id="editor"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script>
+        let editor;
+        
+        require.config({ 
+            paths: { 
+                vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' 
+            } 
+        });
+
+        const defaultCode = {
+            javascript: `// Bem-vindo ao Monaco Editor!\n// Este é o mesmo editor usado no VS Code\n\nfunction saudacao(nome) {\n    console.log(\`Olá, \${nome}!\`);\n    return \`Bem-vindo, \${nome}!\`;\n}\n\nconst resultado = saudacao('Desenvolvedor');\nconsole.log(resultado);\n\n// Experimente o autocompletar com Ctrl+Space\n// e a formatação com o botão "Formatar"`,
+            typescript: `// TypeScript com tipagem estática\n\ninterface Usuario {\n    nome: string;\n    idade: number;\n    ativo: boolean;\n}\n\nfunction criarUsuario(nome: string, idade: number): Usuario {\n    return {\n        nome,\n        idade,\n        ativo: true\n    };\n}\n\nconst usuario = criarUsuario('João', 25);\nconsole.log(usuario);`,
+            html: `<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Minha Página</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            padding: 20px;\n        }\n    </style>\n</head>\n<body>\n    <h1>Olá, Mundo!</h1>\n    <p>Este é um exemplo de HTML.</p>\n</body>\n</html>`,
+            css: `/* Estilos modernos com CSS */\n\n:root {\n    --primary-color: #007acc;\n    --bg-color: #1e1e1e;\n    --text-color: #d4d4d4;\n}\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    background: var(--bg-color);\n    color: var(--text-color);\n    font-family: 'Segoe UI', sans-serif;\n}\n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 20px;\n}`,
+            python: `# Bem-vindo ao Python!\n\ndef calcular_fibonacci(n):\n    """Calcula a sequência de Fibonacci até n termos"""\n    fib = [0, 1]\n    \n    for i in range(2, n):\n        fib.append(fib[i-1] + fib[i-2])\n    \n    return fib[:n]\n\n# Exemplo de uso\nresultado = calcular_fibonacci(10)\nprint(f"Fibonacci: {resultado}")\n\n# Lista comprehension\nquadrados = [x**2 for x in range(10)]\nprint(f"Quadrados: {quadrados}")`,
+            json: `{\n  "nome": "Monaco Editor",\n  "versao": "0.45.0",\n  "descricao": "Editor de código poderoso",\n  "recursos": [\n    "Destaque de sintaxe",\n    "Autocompletar inteligente",\n    "Múltiplas linguagens",\n    "Temas personalizáveis"\n  ],\n  "suporte": {\n    "javascript": true,\n    "typescript": true,\n    "python": true,\n    "html": true\n  }\n}`
+        };
+
+        require(['vs/editor/editor.main'], function() {
+            editor = monaco.editor.create(document.getElementById('editor'), {
+                value: 'print ("Hello World")',
+                language: 'python',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: {
+                    enabled: true
+                },
+                scrollBeyondLastLine: false,
+                wordWrap: 'on',
+                lineNumbers: 'on',
+                renderWhitespace: 'selection',
+                cursorBlinking: 'smooth',
+                cursorSmoothCaretAnimation: true,
+                smoothScrolling: true,
+                suggestOnTriggerCharacters: true,
+                quickSuggestions: true,
+                tabSize: 2
+            });
+
+            // Atualizar posição do cursor
+            editor.onDidChangeCursorPosition((e) => {
+                const position = e.position;
+            });
+        });
+    </script>
+</body>
+</html>
