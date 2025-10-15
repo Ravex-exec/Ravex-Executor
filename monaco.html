@@ -52,14 +52,29 @@
             html: `<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Minha Página</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            padding: 20px;\n        }\n    </style>\n</head>\n<body>\n    <h1>Olá, Mundo!</h1>\n    <p>Este é um exemplo de HTML.</p>\n</body>\n</html>`,
             css: `/* Estilos modernos com CSS */\n\n:root {\n    --primary-color: #007acc;\n    --bg-color: #1e1e1e;\n    --text-color: #d4d4d4;\n}\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    background: var(--bg-color);\n    color: var(--text-color);\n    font-family: 'Segoe UI', sans-serif;\n}\n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 20px;\n}`,
             python: `# Bem-vindo ao Python!\n\ndef calcular_fibonacci(n):\n    """Calcula a sequência de Fibonacci até n termos"""\n    fib = [0, 1]\n    \n    for i in range(2, n):\n        fib.append(fib[i-1] + fib[i-2])\n    \n    return fib[:n]\n\n# Exemplo de uso\nresultado = calcular_fibonacci(10)\nprint(f"Fibonacci: {resultado}")\n\n# Lista comprehension\nquadrados = [x**2 for x in range(10)]\nprint(f"Quadrados: {quadrados}")`,
-            json: `{\n  "nome": "Monaco Editor",\n  "versao": "0.45.0",\n  "descricao": "Editor de código poderoso",\n  "recursos": [\n    "Destaque de sintaxe",\n    "Autocompletar inteligente",\n    "Múltiplas linguagens",\n    "Temas personalizáveis"\n  ],\n  "suporte": {\n    "javascript": true,\n    "typescript": true,\n    "python": true,\n    "html": true\n  }\n}`
+            json: `{\n  "nome": "Monaco Editor",\n  "versao": "0.45.0",\n  "descricao": "Editor de código poderoso",\n  "recursos": [\n    "Destaque de sintaxe",\n    "Autocompletar inteligente",\n    "Múltiplas linguagens",\n    "Temas personalizáveis"\n  ],\n  "suporte": {\n    "javascript": true,\n    "typescript": true,\n    "python": true,\n    "html": true\n  }\n}`,
+            lua: `print("Hello World")`
         };
 
         require(['vs/editor/editor.main'], function() {
+            monaco.editor.defineTheme('red-theme', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: 'number', foreground: 'ff0000' }
+                ],
+                colors: {
+                    'editor.background': '#1e1e1e',
+                    'editorLineNumber.foreground': '#ff0000',
+                    'editorLineNumber.activeForeground': '#ff0000',
+                    'editorCursor.foreground': '#ff0000'
+                }
+            });
+
             editor = monaco.editor.create(document.getElementById('editor'), {
-                value: 'print ("Hello World")',
-                language: 'python',
-                theme: 'vs-dark',
+                value: 'print("Hello World")',
+                language: 'lua',
+                theme: 'red-theme',
                 automaticLayout: true,
                 fontSize: 14,
                 minimap: {
@@ -75,6 +90,92 @@
                 suggestOnTriggerCharacters: true,
                 quickSuggestions: true,
                 tabSize: 2
+            });
+
+            // Adicionar autocomplete customizado para Roblox
+            monaco.languages.registerCompletionItemProvider('lua', {
+                provideCompletionItems: (model, position) => {
+                    const suggestions = [
+                        {
+                            label: 'local',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'local ${1:name}',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Declara uma variável local'
+                        },
+                        {
+                            label: 'function',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'function ${1:name}(${2:args})\n\tend',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Define uma função'
+                        },
+                        {
+                            label: 'print',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'print(${1:message})',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Imprime mensagem no console'
+                        },
+                        {
+                            label: 'if',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'if ${1:condition} then\n\t${2:code}\nend',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Estrutura condicional'
+                        },
+                        {
+                            label: 'for',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'for ${1:i} = ${2:1}, ${3:10} do\n\t${4:code}\nend',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Loop for'
+                        },
+                        {
+                            label: 'while',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'while ${1:condition} do\n\t${2:code}\nend',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Loop while'
+                        },
+                        {
+                            label: 'game:GetService',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'game:GetService("${1:ServiceName}")',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Obtém um serviço do Roblox'
+                        },
+                        {
+                            label: 'script.Parent',
+                            kind: monaco.languages.CompletionItemKind.Variable,
+                            insertText: 'script.Parent',
+                            documentation: 'Referência ao pai do script'
+                        },
+                        {
+                            label: 'Instance.new',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'Instance.new("${1:ClassName}")',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Cria uma nova instância'
+                        },
+                        {
+                            label: 'wait',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'wait(${1:seconds})',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Aguarda segundos'
+                        },
+                        {
+                            label: 'connect',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'connect(function(${1:args})\n\t${2:code}\nend)',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Conecta a um sinal'
+                        }
+                    ];
+
+                    return { suggestions: suggestions };
+                }
             });
 
             // Atualizar posição do cursor
